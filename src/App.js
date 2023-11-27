@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import AddTask from './AddTask';
+import ListTask from './ListTask';
+import { addTask, toggleTask, editTask } from './actions';
 
-function App() {
+const App = () => {
+  const tasks = useSelector(state => state.tasks);
+  const dispatch = useDispatch();
+
+  const handleAddTask = (description) => {
+    dispatch(addTask(description));
+  };
+
+  const handleToggleTask = (taskId) => {
+    dispatch(toggleTask(taskId));
+  };
+
+  const handleEditTask = (taskId) => {
+    const newDescription = prompt('Enter the new description:');
+    if (newDescription) {
+      dispatch(editTask(taskId, newDescription));
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <AddTask addTask={handleAddTask} />
+      <ListTask tasks={tasks} toggleTask={handleToggleTask} editTask={handleEditTask} />
     </div>
   );
-}
+};
 
 export default App;
